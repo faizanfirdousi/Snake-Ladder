@@ -1,37 +1,58 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Manager {
-	public Scanner input = new Scanner(System.in);
-	public Random random = new Random();
-	public int diceOut=0;
+    public Scanner input = new Scanner(System.in);
+    public Random random = new Random();
+    public int diceOut = 0;
     public int currentLocation = -1;
-    public String[] board= new String[12];
+    public String[] board = new String[100];
+
+    void initializeArray() {
+        for (int i = 0; i < 100; i++) {
+            board[i] = String.valueOf((i+1));
+        }
+        ladder(board);
+    }
+
+    public Manager() {
+    }
+
     public void makeMove() {
-    	while(true) {
-    		String[] board = {"1","2","3","4","5","6","7","8","9","10","11","12"};
-    		System.out.println("Enter M to play next move");
-        	String decide =input.nextLine();
-        	if(!decide.equals("M")) {
-        		break;
-        	}
-        	diceOut = random.nextInt(6)+1;
-        	currentLocation = currentLocation + diceOut;
-        	
-        	board[currentLocation]=board[currentLocation]+"U";
-        	
-        	printMove();
+        initializeArray();
+        while (true) {
+            System.out.println("Enter M to play next move");
+            String decide = input.nextLine();
+            if (!decide.equals("M")) {
+                break;
+            }
+            diceOut = random.nextInt(6) + 1;
+            currentLocation = currentLocation + diceOut;
+
+            printMove();
         }
     }
-    
+
     public void printMove() {
-    	for(int i=0; i<12; i++) {
-	    	System.out.print(board[i]+" ");
-	    }
-    	
-    	makeMove();
+        String[] boardCopy = Arrays.copyOf(board, board.length);
+        boardCopy[currentLocation] = boardCopy[currentLocation] + "U";
+        for (int i = 99; i >= 0; i--) {
+            if ((i+1) % 10 == 0) {
+                System.out.println();
+            }
+            System.out.print(boardCopy[i] + "\t");
+        }
+
+        makeMove();
     }
-    
-    
-    
+
+    public void ladder(String[] board) {
+        this.board = board;
+        board[3] += "L";
+        board[10] += "L";
+        board[15] += "L";
+        board[20] += "L";
+    }
 }
